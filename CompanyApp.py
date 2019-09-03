@@ -7,32 +7,43 @@ import time
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+import pg8000
 from pg8000 import connect
 
 
 class VehicleApp:
-    def __init__(self, master, *args, **kwargs):
+    def __init__(self, master, is_active, *args, **kwargs):
         self.master = master
         self.string_it = StringVar
+        # This generates and sets up the window
         self.frame = Frame(self.master, width=1200, height=720)
         self.frame.grid()
-        try:
-            f = open("Password.txt", "r")
-            read_line = f.readline()
-            f.close()
+        self.is_active = is_active
+        if self.is_active is False:
+            try:
+                f = open("Password.txt", "r")
+                read_line = f.readline()
+                f.close()
 
-            db = open("database.txt", "r")
-            read_db = db.readline()
-            db.close()
+                db = open("database.txt", "r")
+                read_db = db.readline()
+                db.close()
 
-            self.conn = connect(user='postgres', password=read_line, database=read_db)
-            self.cursor = self.conn.cursor()
-            print("Connection successful")
-            self.widgets()
-        except Exception as e:
-            print(e)
-            messagebox.showerror("Connection error", "There is no connection available.")
-            quit()
+                # Creates a connection to my database
+                self.conn = connect(user='postgres', password=read_line, database=read_db)
+                # Creates a cursor used to carry out any SQL commands
+                self.cursor = self.conn.cursor()
+                print("Connection successful")
+                # Calls my first method that generates the home screen
+                self.widgets()
+
+                # Brings up a text box that warns that a connection can not be established then it stops the program.
+            except Exception as e:
+                print(e)
+                messagebox.showerror("Connection error", "There is no connection available.")
+                quit()
+        else:
+            pass
 
     def widgets(self):
         head = Label(self.frame, text="Vehicles", font="bold 30")
@@ -48,7 +59,7 @@ the reason for removal and all the other information.""")
 information is entered!""")
         information.place(x=20, y=100)
 
-        add_car = Button(self.frame, text="Add Vehicle", font="bold 12", command=self.add_vehicle)
+        add_car = Button(self.frame, text="Add Vehicle", font="bold 12", command=self.des_home_add_vehicles)
         add_car.place(x=20, y=400)
 
         remove_car = Button(self.frame, text="Remove car", font="bold 12", command="")
@@ -57,24 +68,30 @@ information is entered!""")
         quit_button = Button(self.frame, text="quit", font="bold 12", command=quit)
         quit_button.place(y=400, x=900)
 
-    def add_vehicle(self):
+    def des_home_add_vehicles(self):
         self.frame.destroy()
-        self.__init__(self.new_master)
-        print("Hello world")
-        print("This is my home")
+        self.__init__(self.master, True)
+        self.add_vehicle()
+
+    def add_vehicle(self):
+        new_vehicle_heading = Label(self.frame, text="New Vehicle", font="bold 30")
+        new_vehicle_heading.place(x=10, y=10)
 
         self.cursor.close()
         self.conn.close()
 
-    def new_master(self):
-        header = Label(self.frame, text="Hello world", font="bold 13")
-        header.place(x=0, y=0)
+        return_home_bttn = Button(self.frame, text="Return to Home", font="bold 12", command=self.back_to_home)
+        return_home_bttn.place(x=10, y=100)
+
+    def back_to_home(self):
+        self.frame.destroy()
+        self.__init__(self.master, False)
 
 
 window = Tk()
 window.title("Vehicle App")
 window.geometry("1200x720+0+0")
-app = VehicleApp(window)
+app = VehicleApp(window, False)
 
 window.mainloop()
 
