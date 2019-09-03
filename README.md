@@ -10,3 +10,6 @@ My goals for this project:
 This program will be built overtime and I will make adjustments as they are completed.
 
 Thanks for looking at my code.
+
+Corrections:
+- commit message should be -Added parameter to init method to stop the rebuilding of the homepage.-
