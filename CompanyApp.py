@@ -3,11 +3,11 @@ written off. The program will be built as a GUI that will give the user instruct
 Vehicle ids remain with the vehicle even after sale or loss and id will not be replaced. Id number dies with vehicle
 in the database."""
 
-import time
+# import time
 from tkinter import *
-from tkinter import ttk
+# from tkinter import ttk
 from tkinter import messagebox
-import pg8000
+# import pg8000
 from pg8000 import connect
 
 
@@ -18,6 +18,11 @@ class VehicleApp:
         # This generates and sets up the window
         self.frame = Frame(self.master, width=1200, height=720)
         self.frame.grid()
+        self.car_manufacturer_ent = ""
+        self.model_ent = ""
+        self.vehicle_type_ent = ""
+        self.license_plate_ent = ""
+        self.vin_number_ent = ""
         self.is_active = is_active
         if self.is_active is False:
             try:
@@ -36,6 +41,7 @@ class VehicleApp:
                 print("Connection successful")
                 # Calls my first method that generates the home screen
                 self.widgets()
+                # self.add_vehicle()
 
                 # Brings up a text box that warns that a connection can not be established then it stops the program.
             except Exception as e:
@@ -77,11 +83,41 @@ information is entered!""")
         new_vehicle_heading = Label(self.frame, text="New Vehicle", font="bold 30")
         new_vehicle_heading.place(x=10, y=10)
 
+        car_manufacturer = Label(self.frame, text="Car Manufacturer:", font="bold 17")
+        car_manufacturer.place(x=0, y=70)
+
+        self.car_manufacturer_ent = Entry(self.frame, font="bold 17")
+        self.car_manufacturer_ent.place(x=200, y=70)
+
+        model = Label(self.frame, text="Model:", font="bold 17")
+        model.place(x=0, y=110)
+
+        self.model_ent = Entry(self.frame, font="bold 17")
+        self.model_ent.place(x=200, y=110)
+
+        vehicle_type = Label(self.frame, text="Vehicle type:", font="bold 17")
+        vehicle_type.place(x=0, y=150)
+
+        self.vehicle_type_ent = Entry(self.frame, font="bold 17")
+        self.vehicle_type_ent.place(x=200, y=150)
+
+        license_plate = Label(self.frame, text="License plate:", font="bold 17")
+        license_plate.place(x=0, y=190)
+
+        self.license_plate_ent = Entry(self.frame, font="bold 17")
+        self.license_plate_ent.place(x=200, y=190)
+
+        vin_number = Label(self.frame, text="Vin number:", font="bold 17")
+        vin_number.place(x=0, y=230)
+
+        self.vin_number_ent = Entry(self.frame, font="bold 17")
+        self.vin_number_ent.place(x=200, y=230)
+
         self.cursor.close()
         self.conn.close()
 
         return_home_bttn = Button(self.frame, text="Return to Home", font="bold 12", command=self.back_to_home)
-        return_home_bttn.place(x=10, y=100)
+        return_home_bttn.place(x=10, y=600)
 
     def back_to_home(self):
         self.frame.destroy()
