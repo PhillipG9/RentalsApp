@@ -116,8 +116,8 @@ information is entered!""")
         self.cursor.close()
         self.conn.close()
 
-        return_home_bttn = Button(self.frame, text="Return to Home", font="bold 12", command=self.back_to_home)
-        return_home_bttn.place(x=10, y=600)
+        return_home_btn = Button(self.frame, text="Return to Home", font="bold 12", command=self.back_to_home)
+        return_home_btn.place(x=10, y=600)
 
     def back_to_home(self):
         self.frame.destroy()
